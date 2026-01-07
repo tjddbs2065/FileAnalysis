@@ -8,20 +8,25 @@ namespace FileAnalysis.Domain.MBR
 {
     internal class PartitionInfo
     {
-        public long startOffset { get; }
-        public long sectorCount { get; }
+        // 파티션이 시작되는 섹터 주소
+        public long startSector { get; }
+
+        // 파티션의 크기(섹터로)
+        public long totalSectors { get; }
+
+        // 파티션 타입
         public byte partitionType { get; }
 
-        public PartitionInfo(long startOffset, long sectorCount, byte partitionType)
+        public PartitionInfo(long startSector, long totalSectors, byte partitionType)
         {
-            this.startOffset = startOffset;
-            this.sectorCount = sectorCount;
+            this.startSector = startSector;
+            this.totalSectors = totalSectors;
             this.partitionType = partitionType;
         }
 
         public override string ToString()
         {
-            return startOffset + ":" + sectorCount + ":" + partitionType;
+            return startSector + ":" + totalSectors + ":" + partitionType;
         }
     }
 }

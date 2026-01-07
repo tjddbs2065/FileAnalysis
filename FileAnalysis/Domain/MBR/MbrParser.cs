@@ -15,17 +15,14 @@ namespace FileAnalysis.Domain.MBR
             // 파티션 엔트리 offset 계산
             long entryOffset = MbrConstants.PartitionTableOffset + index * MbrConstants.PartitionEntrySize;
 
-
-            // 엔트리 읽기
+            // partitionTable 읽기
             byte[] entry = device.Read(entryOffset, MbrConstants.PartitionTableSize);
-
-            Console.WriteLine(entry[0]);
 
             byte partitionType = entry[4];
             uint startLba = BitConverter.ToUInt32(entry, 8);
-            uint sectorCount = BitConverter.ToUInt32(entry, 12);
+            uint totalSector = BitConverter.ToUInt32(entry, 12);
 
-            return new PartitionInfo(startLba, sectorCount, partitionType);
+            return new PartitionInfo(startLba, totalSector, partitionType);
         }
     }
 }

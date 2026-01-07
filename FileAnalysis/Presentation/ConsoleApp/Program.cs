@@ -1,4 +1,5 @@
 ﻿using FileAnalysis.Domain;
+using FileAnalysis.Domain.Fat32;
 using FileAnalysis.Domain.MBR;
 using FileAnalysis.Infrastructure.FileSystem;
 using System;
@@ -21,6 +22,10 @@ namespace FileAnalysis
             IBlockDevice blockDevice = new StreamDevice(fs);
 
             PartitionInfo partitionZero = MbrParser.GetPartition(blockDevice, 0);
+
+            Fat32BootSector bootSector = BootSectorParser.getFat32Context(blockDevice, partitionZero.startSector);
+
+            Console.WriteLine(bootSector.ToString());
 
         }
     }

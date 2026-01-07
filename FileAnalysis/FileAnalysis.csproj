@@ -43,6 +43,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Domain\Fat32\BootSectorParser.cs" />
+    <Compile Include="Domain\Fat32\Fat32BootSector.cs" />
+    <Compile Include="Domain\Fat32\Fat32Context.cs" />
     <Compile Include="Domain\FileSystem\DirectoryEntry.cs" />
     <Compile Include="Domain\Fat32\Fat32FileSystem.cs" />
     <Compile Include="Domain\MBR\MbrConstants.cs" />
