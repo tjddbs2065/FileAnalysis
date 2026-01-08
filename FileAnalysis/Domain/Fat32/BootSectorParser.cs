@@ -23,8 +23,10 @@ namespace FileAnalysis.Domain.Fat32
             ushort fsInfoSector = BitConverter.ToUInt16(buffer, 0x30);
             string fileSystemType = Encoding.ASCII.GetString(buffer, 0x52, 8).TrimEnd('\0', ' ');
 
+            long partitionStartOffset = startSector * bytesPerSector;
 
             return new Fat32BootSector(
+                partitionStartOffset,
                 oemName,
                 bytesPerSector, 
                 sectorsPerCluster,

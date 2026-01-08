@@ -22,10 +22,16 @@ namespace FileAnalysis
             IBlockDevice blockDevice = new StreamDevice(fs);
 
             PartitionInfo partitionZero = MbrParser.GetPartition(blockDevice, 0);
+            Console.WriteLine(partitionZero.ToString());
+            Console.WriteLine();
 
             Fat32BootSector bootSector = BootSectorParser.getFat32Context(blockDevice, partitionZero.startSector);
-
             Console.WriteLine(bootSector.ToString());
+            Console.WriteLine();
+
+            Fat32Context fat32Context = Fat32Parser.getFat32Context(blockDevice, bootSector);
+            Console.WriteLine(fat32Context.ToString());
+            Console.WriteLine();
 
         }
     }
