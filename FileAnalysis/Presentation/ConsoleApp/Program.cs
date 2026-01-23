@@ -1,5 +1,6 @@
 ﻿using FileAnalysis.Domain;
 using FileAnalysis.Domain.Fat32;
+using FileAnalysis.Domain.FileSystem;
 using FileAnalysis.Domain.MBR;
 using FileAnalysis.Infrastructure.FileSystem;
 using System;
@@ -22,17 +23,35 @@ namespace FileAnalysis
             IBlockDevice blockDevice = new StreamDevice(fs);
 
             PartitionInfo partitionZero = MbrParser.GetPartition(blockDevice, 0);
-            Console.WriteLine(partitionZero.ToString());
-            Console.WriteLine();
 
             Fat32BootSector bootSector = BootSectorParser.getFat32Context(blockDevice, partitionZero.startSector);
-            Console.WriteLine(bootSector.ToString());
-            Console.WriteLine();
 
-            Fat32Context fat32Context = Fat32Parser.getFat32Context(blockDevice, bootSector);
-            Console.WriteLine(fat32Context.ToString());
-            Console.WriteLine();
+            Fat32Context fat32Context = Fat32Parser.getFat32Context(bootSector);
 
+            //DirectoryEntryParser.getDirectoryEntryList(blockDevice, fat32Context, fat32Context.RootDirectoryCluster);
+
+            Fat32Node rootNode = Fat32Node.getRoot();
+
+            List<DirectoryEntry> entries =  DirectoryEntryParser.getDirectoryEntryList(blockDevice, fat32Context, rootNode.StartCluster);
+            foreach (var item in entries)
+            {
+                rootNode.children.Add(item.Name, new Fat32Node(item.Name, item.FileClusterNumber, rootNode));
+            }
+            Fat32Node childNode = rootNode.children["FOLDER"];
+            entries = DirectoryEntryParser.getDirectoryEntryList(blockDevice, fat32Context, childNode.StartCluster);
+            foreach (var item in entries)
+            {
+                childNode.children.Add(item.Name, new Fat32Node(item.Name, item.FileClusterNumber, childNode));
+            }
+            Console.WriteLine(rootNode.ToString());
+            //Fat32Node currentNode = rootNode;
+            //while (true)
+            //{
+            //    //Console.Clear();
+            //    Console.WriteLine(currentNode);
+            //    string fileName = Console.ReadLine();
+            //    if (fileName.Equals("exit")) break;
+            //}
         }
     }
 }
